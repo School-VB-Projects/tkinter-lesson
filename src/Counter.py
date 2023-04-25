@@ -39,9 +39,14 @@ class Counter:
             textvariable=self.count,
             font="Poppins"
         )
+        self.choose_entry_label: Label = ttk.Label(
+            self.frame,
+            text="Choose your entry",
+            font="Poppins"
+        )
         self.custom_entry_label: Label = ttk.Label(
             self.frame,
-            text="Custom Entry",
+            text="Set a custom entry",
             font="Poppins"
         )
 
@@ -62,21 +67,6 @@ class Counter:
             command=self.set_limit
         )
 
-        self.limit_5 = ttk.Radiobutton(
-            self.frame,
-            text='Put limit to 5',
-            variable=self.limit,
-            value=5,
-            command=self.set_limit
-        )
-        self.limit_10 = ttk.Radiobutton(
-            self.frame,
-            text='Put limit to 10',
-            variable=self.limit,
-            value=10,
-            command=self.set_limit
-        )
-
         self.check = ttk.Checkbutton(
             self.frame,
             text='Enable logs',
@@ -89,6 +79,13 @@ class Counter:
             textvariable=self.limit
         )
 
+        self.combobox = ttk.Combobox(
+            self.frame,
+            textvariable=self.limit,
+            values=("5", "10", "15", "20")
+        )
+
+        # self.combobox.bind('<<ComboboxSelected>>', self.set_limit)
         window.bind('<Return>', lambda e: self.button.invoke())
 
         self.widgets = [
@@ -96,11 +93,11 @@ class Counter:
             self.button,
             self.reset,
             self.check,
-            self.limit_5,
-            self.limit_10,
+            self.choose_entry_label,
+            self.combobox,
             self.custom_entry_label,
             self.entry,
-            self.confirm
+            self.confirm,
         ]
 
         self.compute_widgets()
