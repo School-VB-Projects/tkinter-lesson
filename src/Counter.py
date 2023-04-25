@@ -53,6 +53,8 @@ class Counter:
         self.limit_5.pack()
         self.limit_10.pack()
 
+        print("History")
+
     def check_reset(self) -> None:
         if self.count.get() != Defaults.COUNT.value or self.check.instate(
                 [States.NOT_SELECTED.value]) or self.limit.get() != Defaults.LIMIT.value or self.button.instate(
