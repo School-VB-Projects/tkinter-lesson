@@ -1,4 +1,19 @@
+from enum import Enum
 from tkinter import Tk, ttk, PhotoImage, BooleanVar, IntVar, Frame, Label
+
+
+class States(Enum):
+    SELECTED = 'selected'
+    DISABLED = 'disabled'
+    ENABLED = '!disabled'
+
+
+class Defaults(Enum):
+    COUNT: int = 0
+    LOGS: bool = True
+    LIMIT: int = 5
+    CHECK_STATE = [States.SELECTED.value]
+    BUTTON_STATE = [States.ENABLED.value]
 
 
 class Test:
@@ -12,9 +27,10 @@ class Test:
 
         self.frame.pack()
 
-        self.count: IntVar = IntVar(value=0)
-        self.enable_logs_default: BooleanVar = BooleanVar(value=True)
-        self.limit = IntVar(value=5)
+        self.enable_logs_default: BooleanVar = BooleanVar(value=bool(Defaults.LOGS.value))
+
+        self.count: IntVar = IntVar(value=Defaults.COUNT.value)
+        self.limit = IntVar(value=Defaults.LIMIT.value)
 
         self.label: Label = ttk.Label(self.frame, textvariable=self.count, font="Poppins")
         self.button = ttk.Button(self.frame, text="+1", default="active", command=self.test)
@@ -35,28 +51,31 @@ class Test:
         self.limit_5.pack()
         self.limit_10.pack()
 
+    def log_if_enabled(self, text: str) -> None:
+        if self.check.instate([States.SELECTED.value]):
+            print(text)
+
     def test(self) -> None:
         count = self.count.get()
         if count >= self.limit.get():
-            print("You have reached the limit")
-            self.button.state(['disabled'])
+            self.button.state([States.DISABLED.value])
+            self.log_if_enabled("You have reached the limit")
         else:
-            if self.check.instate(['selected']):
-                print("+1")
+            self.log_if_enabled("+1")
             self.count.set(count + 1)
 
     def reset(self) -> None:
-        self.count.set(0)
-        self.check.state(['selected'])
-        self.limit.set(5)
-        self.button.state(['!disabled'])
-        print("Reset")
+        self.count.set(Defaults.COUNT.value)
+        self.check.state(Defaults.CHECK_STATE.value)
+        self.limit.set(Defaults.LIMIT.value)
+        self.button.state(Defaults.BUTTON_STATE.value)
+        self.log_if_enabled("Reset values")
 
     def toggle_logs(self) -> None:
-        if self.check.instate(['selected']):
+        if self.check.instate([States.SELECTED.value]):
             print("Enable logs")
         else:
             print("Disable logs")
 
     def put_limit(self) -> None:
-        print(f"You have put the limit to {self.limit.get()}")
+        self.log_if_enabled(f"You have put the limit to {self.limit.get()}")
