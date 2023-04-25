@@ -1,5 +1,10 @@
-def print_hierarchy(w, depth=0):
-    print('  '*depth + w.winfo_class() + ' w=' + str(w.winfo_width()) + ' h=' + str(w.winfo_height()) + ' x=' + str(w.winfo_x()) + ' y=' + str(w.winfo_y()))
-    for i in w.winfo_children():
-        print_hierarchy(i, depth+1)
+from tkinter import Tk, Widget
+from typing import Union
 
+
+# https://tkdocs.com/tutorial/concepts.html
+def print_hierarchy(root: Union[Tk, Widget], depth=0) -> None:
+    print('  ' * depth + root.winfo_class() + ' w=' + str(root.winfo_width()) + ' h=' + str(
+        root.winfo_height()) + ' x=' + str(root.winfo_x()) + ' y=' + str(root.winfo_y()))
+    for widget in root.winfo_children():
+        print_hierarchy(widget, depth + 1)
