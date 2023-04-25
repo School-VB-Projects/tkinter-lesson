@@ -1,4 +1,4 @@
-from tkinter import Tk, ttk, StringVar
+from tkinter import Tk, ttk, StringVar, PhotoImage
 
 
 class Test:
@@ -8,24 +8,33 @@ class Test:
 
         # https://tkdocs.com/tutorial/widgets.html
         ttk.Style().configure('Danger.TFrame', borderwidth=5, relief='sunken')
-        frame = ttk.Frame(window, padding="20 20 20 20", style='Danger.TFrame')
+        self.frame = ttk.Frame(window, padding="20 20 20 20", style='Danger.TFrame')
 
-        frame.pack()
+        self.frame.pack()
 
         self.count = 0
         self.text = StringVar()
         self.text.set(str(self.count))
+        self.image = PhotoImage(file='assets/pycharm.png')
 
-        label = ttk.Label(frame, textvariable=self.text, font="Poppins")
-        button = ttk.Button(frame, text="+1", default="active", command=self.test)
+        self.picture = ttk.Label(image=self.image)
+        self.label = ttk.Label(self.frame, textvariable=self.text, font="Poppins")
+        self.button = ttk.Button(self.frame, text="+1", default="active", command=self.test)
 
-        window.bind('<Return>', lambda e: button.invoke())
+        window.bind('<Return>', lambda e: self.button.invoke())
 
-        label.pack()
-        button.pack()
+        # self.picture.pack()
+        self.label.pack()
+        self.button.pack()
 
     def test(self):
-        print("+1")
-        self.count += 1
-        self.text.set(str(self.count))
-        print(self.count, self.text)
+        if self.count >= 10:
+            print("ERROR: You have reached the limit")
+            self.button.state(['disabled'])
+            pass
+        else:
+            print("+1")
+            self.count += 1
+            self.text.set(str(self.count))
+            # print(f"Count: {self.count}")
+

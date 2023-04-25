@@ -9,6 +9,7 @@ def run() -> None:
     # FeetToMeters(window)
     Test(window)
     print_hierarchy(window)
+    print("History")
     window.mainloop()
 
 
