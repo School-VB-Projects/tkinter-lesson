@@ -3,6 +3,7 @@ from tkinter import Tk, ttk, BooleanVar, IntVar, Frame, Label
 
 
 class States(Enum):
+    """States widgets"""
     SELECTED = 'selected'
     DISABLED = 'disabled'
     NOT_SELECTED = '!selected'
@@ -10,6 +11,8 @@ class States(Enum):
 
 
 class Defaults(Enum):
+    """Defaults values"""
+    FRAME = None
     COUNT: int = 0
     LOGS: bool = True
     LIMIT: int = 5
@@ -19,14 +22,14 @@ class Defaults(Enum):
 
 
 class Counter:
+    """Counter application"""
     def __init__(self, window: Tk) -> None:
         # https://tkdocs.com/tutorial/concepts.html
-        self.frame = None
         window.title('Counter')
+        self.frame = Defaults.FRAME.value
         self.compute_frame(window)
 
         self.enable_logs_default: BooleanVar = BooleanVar(value=bool(Defaults.LOGS.value))
-
         self.count: IntVar = IntVar(value=Defaults.COUNT.value)
         self.limit = IntVar(value=Defaults.LIMIT.value)
 
@@ -101,11 +104,13 @@ class Counter:
         print("History")
 
     def compute_frame(self, window: Tk):
+        """Configure and compute the frame"""
         ttk.Style().configure('Danger.TFrame', borderwidth=5, relief='sunken')
         self.frame: Frame = ttk.Frame(window, padding="20 20 20 20", style='Danger.TFrame')
         self.frame.pack()
 
     def check_reset(self) -> None:
+        """Check if reset is possible and change the button state"""
         if self.count.get() != Defaults.COUNT.value \
                 or self.check.instate([States.NOT_SELECTED.value]) \
                 or self.limit.get() != Defaults.LIMIT.value \
@@ -115,6 +120,7 @@ class Counter:
             self.reset.state([States.DISABLED.value])
 
     def toggle_logs(self) -> None:
+        """Enable or disable logs console"""
         if self.check.instate([States.SELECTED.value]):
             print("Enable logs")
         else:
@@ -122,10 +128,12 @@ class Counter:
         self.check_reset()
 
     def log_if_enabled(self, text: str) -> None:
+        """If Enable logs option is enabled, print text in console"""
         if self.check.instate([States.SELECTED.value]):
             print(text)
 
     def increment(self) -> None:
+        """Increment counter (+1) if possible, change state button if not"""
         count = self.count.get()
         if count >= self.limit.get():
             self.button.state([States.DISABLED.value])
@@ -136,6 +144,7 @@ class Counter:
         self.check_reset()
 
     def reset(self) -> None:
+        """Reset all values to default values"""
         self.log_if_enabled("Reset values")
         self.count.set(Defaults.COUNT.value)
         self.check.state(Defaults.CHECK_STATE.value)
@@ -143,13 +152,15 @@ class Counter:
         self.button.state(Defaults.BUTTON_STATE.value)
         self.reset.state([States.DISABLED.value])
 
-    def set_limit(self):
+    def set_limit(self) -> None:
+        """Set limit to requested number"""
         limit = self.limit.get()
         if self.count.get() < limit:
             self.button.state([States.NOT_DISABLED.value])
         self.log_if_enabled(f"You have put the limit to {limit}")
         self.check_reset()
 
-    def compute_widgets(self):
+    def compute_widgets(self) -> None:
+        """Compute all widgets"""
         for widget in self.widgets:
             widget.pack()
