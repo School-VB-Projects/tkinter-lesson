@@ -18,10 +18,10 @@ class Defaults(Enum):
     BUTTON_STATE = [States.NOT_DISABLED.value]
 
 
-class Test:
+class Counter:
     def __init__(self, window: Tk) -> None:
         # https://tkdocs.com/tutorial/concepts.html
-        window.title('Test')
+        window.title('Counter')
 
         # https://tkdocs.com/tutorial/widgets.html
         ttk.Style().configure('Danger.TFrame', borderwidth=5, relief='sunken')
