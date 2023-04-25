@@ -8,7 +8,7 @@ def run() -> None:
     window = Tk()
     # FeetToMeters(window)
     Test(window)
-    print_hierarchy(window)
+    # print_hierarchy(window)
     print("History")
     window.mainloop()
 
