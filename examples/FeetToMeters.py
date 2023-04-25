@@ -28,7 +28,7 @@ class FeetToMeters:
             child.grid_configure(padx=5, pady=5)
 
         feet_entry.focus()
-        root.bind('<Return>', lambda e: self.calculate())
+        root.bind('<Return>', lambda e: self.calculate())  # https://tkdocs.com/tutorial/concepts.html
 
     def calculate(self) -> None:
         try:
