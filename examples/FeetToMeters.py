@@ -1,5 +1,4 @@
-from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, Tk, StringVar, W, E
 
 
 # https://tkdocs.com/tutorial/firstexample.html
