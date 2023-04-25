@@ -1,9 +1,8 @@
 from tkinter import Tk
-
 from examples.FeetToMeters import FeetToMeters
 
 
-def run():
+def run() -> None:
     window = Tk()
     FeetToMeters(window)
     window.mainloop()

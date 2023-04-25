@@ -2,10 +2,10 @@ from tkinter import *
 from tkinter import ttk
 
 
+# https://tkdocs.com/tutorial/firstexample.html
 class FeetToMeters:
 
-    def __init__(self, root):
-
+    def __init__(self, root: Tk):
         root.title("Feet to Meters")
 
         mainframe = ttk.Frame(root, padding="3 3 12 12")
@@ -31,7 +31,7 @@ class FeetToMeters:
         feet_entry.focus()
         root.bind("<Return>", self.calculate)
 
-    def calculate(self):
+    def calculate(self) -> None:
         try:
             value = float(self.feet.get())
             self.meters.set(str(int(0.3048 * value * 10000.0 + 0.5) / 10000.0))
