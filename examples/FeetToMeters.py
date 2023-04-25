@@ -28,11 +28,10 @@ class FeetToMeters:
             child.grid_configure(padx=5, pady=5)
 
         feet_entry.focus()
-        root.bind("<Return>", self.calculate)
+        root.bind('<Return>', lambda e: self.calculate())
 
     def calculate(self) -> None:
         try:
-            value = float(self.feet.get())
-            self.meters.set(str(int(0.3048 * value * 10000.0 + 0.5) / 10000.0))
+            self.meters.set(str(int(0.3048 * float(self.feet.get()) * 10000.0 + 0.5) / 10000.0))
         except ValueError:
             pass
