@@ -34,34 +34,94 @@ class Counter:
         self.count: IntVar = IntVar(value=Defaults.COUNT.value)
         self.limit = IntVar(value=Defaults.LIMIT.value)
 
-        self.label: Label = ttk.Label(self.frame, textvariable=self.count, font="Poppins")
-        self.button = ttk.Button(self.frame, text="+1", command=self.increment)
-        self.reset = ttk.Button(self.frame, text="Reset", command=self.reset, state=States.DISABLED.value)
-        self.limit_5 = ttk.Radiobutton(self.frame, text='Put limit to 5', variable=self.limit, value=5,
-                                       command=self.put_limit)
-        self.limit_10 = ttk.Radiobutton(self.frame, text='Put limit to 10', variable=self.limit, value=10,
-                                        command=self.put_limit)
-        self.check = ttk.Checkbutton(self.frame, text='Enable logs',
-                                     command=self.toggle_logs, variable=self.enable_logs_default)
+        self.count_label: Label = ttk.Label(
+            self.frame,
+            textvariable=self.count,
+            font="Poppins"
+        )
+        self.custom_entry_label: Label = ttk.Label(
+            self.frame,
+            text="Custom Entry",
+            font="Poppins"
+        )
+
+        self.button = ttk.Button(
+            self.frame,
+            text="+1",
+            command=self.increment
+        )
+        self.reset = ttk.Button(
+            self.frame,
+            text="Reset",
+            command=self.reset,
+            state=States.DISABLED.value
+        )
+        self.confirm = ttk.Button(
+            self.frame,
+            text="Confirm",
+            command=self.set_limit
+        )
+
+        self.limit_5 = ttk.Radiobutton(
+            self.frame,
+            text='Put limit to 5',
+            variable=self.limit,
+            value=5,
+            command=self.set_limit
+        )
+        self.limit_10 = ttk.Radiobutton(
+            self.frame,
+            text='Put limit to 10',
+            variable=self.limit,
+            value=10,
+            command=self.set_limit
+        )
+
+        self.check = ttk.Checkbutton(
+            self.frame,
+            text='Enable logs',
+            command=self.toggle_logs,
+            variable=self.enable_logs_default
+        )
+
+        self.entry = ttk.Entry(
+            self.frame,
+            textvariable=self.limit
+        )
 
         window.bind('<Return>', lambda e: self.button.invoke())
 
-        self.label.pack()
-        self.button.pack()
-        self.reset.pack()
-        self.check.pack()
-        self.limit_5.pack()
-        self.limit_10.pack()
+        self.widgets = [
+            self.count_label,
+            self.button,
+            self.reset,
+            self.check,
+            self.limit_5,
+            self.limit_10,
+            self.custom_entry_label,
+            self.entry,
+            self.confirm
+        ]
+
+        self.compute_widgets()
 
         print("History")
 
     def check_reset(self) -> None:
-        if self.count.get() != Defaults.COUNT.value or self.check.instate(
-                [States.NOT_SELECTED.value]) or self.limit.get() != Defaults.LIMIT.value or self.button.instate(
-                [States.DISABLED.value]):
+        if self.count.get() != Defaults.COUNT.value \
+                or self.check.instate([States.NOT_SELECTED.value]) \
+                or self.limit.get() != Defaults.LIMIT.value \
+                or self.button.instate([States.DISABLED.value]):
             self.reset.state([States.NOT_DISABLED.value])
         else:
             self.reset.state([States.DISABLED.value])
+
+    def toggle_logs(self) -> None:
+        if self.check.instate([States.SELECTED.value]):
+            print("Enable logs")
+        else:
+            print("Disable logs")
+        self.check_reset()
 
     def log_if_enabled(self, text: str) -> None:
         if self.check.instate([States.SELECTED.value]):
@@ -85,15 +145,13 @@ class Counter:
         self.button.state(Defaults.BUTTON_STATE.value)
         self.reset.state([States.DISABLED.value])
 
-    def toggle_logs(self) -> None:
-        if self.check.instate([States.SELECTED.value]):
-            print("Enable logs")
-        else:
-            print("Disable logs")
+    def set_limit(self):
+        limit = self.limit.get()
+        if self.count.get() < limit:
+            self.button.state([States.NOT_DISABLED.value])
+        self.log_if_enabled(f"You have put the limit to {limit}")
         self.check_reset()
 
-    def put_limit(self) -> None:
-        if self.count.get() < self.limit.get():
-            self.button.state([States.NOT_DISABLED.value])
-        self.log_if_enabled(f"You have put the limit to {self.limit.get()}")
-        self.check_reset()
+    def compute_widgets(self):
+        for widget in self.widgets:
+            widget.pack()
