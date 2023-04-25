@@ -21,19 +21,16 @@ class Defaults(Enum):
 class Counter:
     def __init__(self, window: Tk) -> None:
         # https://tkdocs.com/tutorial/concepts.html
+        self.frame = None
         window.title('Counter')
-
-        # https://tkdocs.com/tutorial/widgets.html
-        ttk.Style().configure('Danger.TFrame', borderwidth=5, relief='sunken')
-        self.frame: Frame = ttk.Frame(window, padding="20 20 20 20", style='Danger.TFrame')
-
-        self.frame.pack()
+        self.compute_frame(window)
 
         self.enable_logs_default: BooleanVar = BooleanVar(value=bool(Defaults.LOGS.value))
 
         self.count: IntVar = IntVar(value=Defaults.COUNT.value)
         self.limit = IntVar(value=Defaults.LIMIT.value)
 
+        # https://tkdocs.com/tutorial/widgets.html
         self.count_label: Label = ttk.Label(
             self.frame,
             textvariable=self.count,
@@ -85,7 +82,6 @@ class Counter:
             values=("5", "10", "15", "20")
         )
 
-        # self.combobox.bind('<<ComboboxSelected>>', self.set_limit)
         window.bind('<Return>', lambda e: self.button.invoke())
 
         self.widgets = [
@@ -103,6 +99,11 @@ class Counter:
         self.compute_widgets()
 
         print("History")
+
+    def compute_frame(self, window: Tk):
+        ttk.Style().configure('Danger.TFrame', borderwidth=5, relief='sunken')
+        self.frame: Frame = ttk.Frame(window, padding="20 20 20 20", style='Danger.TFrame')
+        self.frame.pack()
 
     def check_reset(self) -> None:
         if self.count.get() != Defaults.COUNT.value \
